@@ -4,8 +4,11 @@ import NewMessageForm from '../../src/NewMessageForm';
 
 describe('<NewMessageForm />', () => {
   describe('clicking the send button', () => {
+    let sendHandler
+
     beforeEach(() => {
-      mount(<NewMessageForm />);
+      sendHandler = cy.spy();
+      mount(<NewMessageForm onSend={sendHandler} />);
 
       cy.get('[data-test="messageText"]')
         .type('New message');
@@ -17,6 +20,10 @@ describe('<NewMessageForm />', () => {
     it('clears the text field', () => {
       cy.get('[data-test="messageText"]')
         .should('have.value', '');
+    });
+
+    it('calls the send handler', () => {
+      expect(sendHandler).to.have.been.calledWith('New message')
     });
   });
 });
